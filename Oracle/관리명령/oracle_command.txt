@@ -1,0 +1,17 @@
+conn /as sysdba
+
+관리자 계정에 접속합니다.
+
+
+alter user hr account unlock;
+
+처음 생성한 hr 계정은 lock 상태로 접속 불가능 상태입니다.
+그걸 unlock 상태로 변경해 접속을 허용합니다.
+
+
+
+alter user hr identified by 1234;
+
+unlock 상태로 만들었으니 비번도 설정합니다.
+
+

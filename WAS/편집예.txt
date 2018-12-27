@@ -1,0 +1,370 @@
+Rights for non-DOD U.S. Government Departments and Agencies are as set
+forth in FAR 52.227-19(c)(1,2).
+
+
+
+
+
+
+
+
+
+
+
+
+
+-bash-3.2$                                                              
+-bash-3.2$ 
+-bash-3.2$ vi ~weblogic/.
+./             .Xauthority    .elm/          .profile       .ssh/
+../            .bash_history  .java/         .sh_history    .sw/
+-bash-3.2$ vi ~weblogic/.profile
+"/weblogic/.profile" [읽기 전용] 134 줄, 3971 자 
+# @(#)B11.23_LR
+
+# Default (example of) super-user's .profile file
+
+
+# Do not put "." in PATH; it is a potential security breach.
+# Do not put "/usr/local/bin" in PATH; it is a potential security breach.
+# Example assumes /home/root exists.
+        set +u
+
+        PATH=/usr/sbin:$PATH:/sbin:/home/root:/opt/java1.5/bin
+
+# Be sure that VUE does not invoke tty commands
+
+   if [ ! "$VUE" ]; then
+
+   # Set up the terminal:
+        if [ "$TERM" = "" ]
+        then
+                eval ` tset -s -Q -m ':?hp' `
+        else
+                eval ` tset -s -Q `
+        fi
+        stty erase "^H" kill "^U" intr "^C" eof "^D" susp "^Z"
+        stty hupcl ixon ixoff
+        tabs
+
+        echo
+        echo "Value of TERM has been set to \"$TERM\". "
+        export TERM
+
+        EDITOR=vi
+        export EDITOR
+
+   fi          # if !VUE
+
+
+# Set up shell environment:
+
+        set -u                                  # error if undefined variable.
+        trap "echo 'logout root'" 0             # what to do on exit.
+"/weblogic/.profile" [읽기 전용] 134 줄, 3971 자
+        set -u                                  # error if undefined variable.
+        trap "echo 'logout root'" 0             # what to do on exit.
+
+
+# Set up shell variables:
+
+        MAIL=/var/mail/root
+        # don't export, so only login shell checks.
+
+        export PS1=`hostname`:'$PWD]'
+        export HISTFILE=~/.sh_history
+        export HISTSIZE=200
+        export EDITOR=vi
+        export LANG=ko_KR.eucKR
+
+# CLASSPATH For SKT-UKEY ######################################################
+########
+        MQ_HOME=/opt/mqm
+        export MQ_HOME
+        MQM_CLASSPATH=$MQ_HOME/java/lib/com.ibm.mq.jar:$MQ_HOME/java/lib/connec
+tor.jar
+        export MQM_CLASSPATH
+
+        EAI_HOME=/home/eaiadmin/TMALL_2S
+        export EAI_HOME
+        EAI_CLASSPATH=$EAI_HOME/lib/braju.jar:$EAI_HOME/lib/eai_mqapi.jar
+        export EAI_CLASSPATH
+
+        CLASSPATH=$MQM_CLASSPATH:$EAI_CLASSPATH
+        export CLASSPATH
+
+        SHLIB_PATH=$MQ_HOME/java/lib
+        export SHLIB_PATH
+
+        LD_LIBRARY_PATH=$MQ_HOME/java/lib
+        export LD_LIBRARY_PATH
+
+        LIBPATH=$MQ_HOME/java/lib
+        export LIBPATH
+###############################################################################
+########
+
+# Set up shell environment:
+
+        set -u                                  # error if undefined variable.
+        trap "echo 'logout root'" 0             # what to do on exit.
+
+
+# Set up shell variables:
+
+        MAIL=/var/mail/root
+        # don't export, so only login shell checks.
+
+        export PS1=`hostname`:'$PWD]'
+        export HISTFILE=~/.sh_history
+        export HISTSIZE=200
+        export EDITOR=vi
+        export LANG=ko_KR.eucKR
+
+# CLASSPATH For SKT-UKEY ######################################################
+########
+        MQ_HOME=/opt/mqm
+        export MQ_HOME
+        MQM_CLASSPATH=$MQ_HOME/java/lib/com.ibm.mq.jar:$MQ_HOME/java/lib/connec
+tor.jar
+        export MQM_CLASSPATH
+
+        EAI_HOME=/home/eaiadmin/TMALL_2S
+        export EAI_HOME
+        EAI_CLASSPATH=$EAI_HOME/lib/braju.jar:$EAI_HOME/lib/eai_mqapi.jar
+        export EAI_CLASSPATH
+
+        CLASSPATH=$MQM_CLASSPATH:$EAI_CLASSPATH
+        export CLASSPATH
+
+        SHLIB_PATH=$MQ_HOME/java/lib
+        export SHLIB_PATH
+
+        LD_LIBRARY_PATH=$MQ_HOME/java/lib
+        export LD_LIBRARY_PATH
+
+        LIBPATH=$MQ_HOME/java/lib
+        export LIBPATH
+
+        LIBPATH=$MQ_HOME/java/lib
+        export LIBPATH
+###############################################################################
+########
+
+# JAVA Environment ###############
+        JAVA_HOME="/opt/java1.5"
+        export JAVA_HOME
+        PATH=$PATH:$JAVA_HOME/bin
+        export PATH
+
+        WEBLOGIC_CLASSPATH=/weblogic/bea/weblogic92/server/lib/weblogic.jar
+        export CLASSPATH=$WEBLOGIC_CLASSPATH:CLASSPATH
+
+##################################
+
+export ORACLE_BASE=/oracle
+export ORACLE_HOME=$ORACLE_BASE/product/102
+
+export NLS_LANG=American_America.KO16KSC5601
+export TNS_ADMIN=$ORACLE_HOME/network/admin
+export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
+export PATH=$PATH:.:/bin:/usr/bin:/usr/sbin:/etc:/opt/bin:/usr/ccs/bin:/usr/loc
+al/bin:$ORACLE_HOME/bin:$ORACLE_HOME/OPatch
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib:$ORACLE_HOME/rdbms/lib
+export SHLIB_PATH=$ORACLE_HOME/lib32:$ORACLE_HOME/rdbms/lib32
+
+CLASSPATH=$ORACLE_HOME/JRE:$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib
+export CLASSPATH=$CLASSPATH:$ORACLE_HOME/network/jlib
+
+
+alias logwww='tail -f /data1/log/was/www/wwwServer1_`date +20'%y%m%d'`.log'
+alias logmobile='tail -f /log/app/mobile/wwwServer1/`date +20'%y%m%d'`.log'
+alias logwww2='tail -f /data1/log/was/www2/wwwServer2.out'
+alias logbo='tail -f /data1/log/was/backoffice/boServer1_`date +20'%y%m%d'`.log
+'
+alias logsell='tail -f /data1/log/was/sell/sellServer1_`date +20'%y%m%d'`.log'
+alias logif='tail -f /data1/log/was/ifhub/ifhubServer1.out'
+alias logsearch='tail -f /data1/log/was/search/*.out'
+alias logcall='tail -f /data1/log/was/callcenter/*.out'
+alias gowls='cd /weblogic/domains/devdomain/'
+
+alias logcall='tail -f /data1/log/was/callcenter/*.out'
+alias gowls='cd /weblogic/domains/devdomain/'
+alias goif='cd /data1/ifhub'
+alias LOG='cd /data1/log/was/www'
+alias cls='clear'
+alias l='ls -alp'
+alias ls='ls -CF'
+alias PAS='cd /data1/log/app/pas'
+alias psj='ps -ef | grep java | grep -v grep'
+alias cdw='cd /weblogic/domains/devdomain'
+
+alias psinsp='ps -ef | grep inspesc | grep -v grep'
+alias cdinsp='cd /data1/www/solution/inspesc/bin/class'
+alias cdilog='cd /data1/log/app/inspesc'
+
+###############################################################
+# buywas1
+###############################################################
+alias buywas1='ssh mon@172.18.182.61'
+
+umask 002
+
+export TMOUT=0
+
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+/JAVA
+
+        set -u                                  # error if undefined variable.
+        trap "echo 'logout root'" 0             # what to do on exit.
+
+
+# Set up shell variables:
+
+        MAIL=/var/mail/root
+        # don't export, so only login shell checks.
+
+        export PS1=`hostname`:'$PWD]'
+        export HISTFILE=~/.sh_history
+        export HISTSIZE=200
+        export EDITOR=vi
+        export LANG=ko_KR.eucKR
+
+# CLASSPATH For SKT-UKEY ######################################################
+########
+        MQ_HOME=/opt/mqm
+        export MQ_HOME
+        MQM_CLASSPATH=$MQ_HOME/java/lib/com.ibm.mq.jar:$MQ_HOME/java/lib/connec
+tor.jar
+        export MQM_CLASSPATH
+
+        EAI_HOME=/home/eaiadmin/TMALL_2S
+        export EAI_HOME
+        EAI_CLASSPATH=$EAI_HOME/lib/braju.jar:$EAI_HOME/lib/eai_mqapi.jar
+        export EAI_CLASSPATH
+
+        CLASSPATH=$MQM_CLASSPATH:$EAI_CLASSPATH
+        export CLASSPATH
+
+        SHLIB_PATH=$MQ_HOME/java/lib
+        export SHLIB_PATH
+
+        LD_LIBRARY_PATH=$MQ_HOME/java/lib
+        export LD_LIBRARY_PATH
+
+        LIBPATH=$MQ_HOME/java/lib
+        export LIBPATH
+@
+
+
+        set -u                                  # error if undefined variable.
+        trap "echo 'logout root'" 0             # what to do on exit.
+
+
+# Set up shell variables:
+
+        MAIL=/var/mail/root
+        # don't export, so only login shell checks.
+
+        export PS1=`hostname`:'$PWD]'
+        export HISTFILE=~/.sh_history
+        export HISTSIZE=200
+        export EDITOR=vi
+        export LANG=ko_KR.eucKR
+
+# CLASSPATH For SKT-UKEY ##############################################################
+        MQ_HOME=/opt/mqm
+        export MQ_HOME
+        MQM_CLASSPATH=$MQ_HOME/java/lib/com.ibm.mq.jar:$MQ_HOME/java/lib/connector.jar
+        export MQM_CLASSPATH
+
+        EAI_HOME=/home/eaiadmin/TMALL_2S
+        export EAI_HOME
+        EAI_CLASSPATH=$EAI_HOME/lib/braju.jar:$EAI_HOME/lib/eai_mqapi.jar
+        export EAI_CLASSPATH
+
+        CLASSPATH=$MQM_CLASSPATH:$EAI_CLASSPATH
+        export CLASSPATH
+
+        SHLIB_PATH=$MQ_HOME/java/lib
+        export SHLIB_PATH
+
+        LD_LIBRARY_PATH=$MQ_HOME/java/lib
+        export LD_LIBRARY_PATH
+
+        LIBPATH=$MQ_HOME/java/lib
+        export LIBPATH
+#######################################################################################
+
+# JAVA Environment ###############
+        JAVA_HOME="/opt/java1.5"
+        export JAVA_HOME
+        PATH=$PATH:$JAVA_HOME/bin
+        export PATH
+
+        WEBLOGIC_CLASSPATH=/weblogic/bea/weblogic92/server/lib/weblogic.jar
+        export CLASSPATH=$WEBLOGIC_CLASSPATH:CLASSPATH
+
+##################################
+
+export ORACLE_BASE=/oracle
+export ORACLE_HOME=$ORACLE_BASE/product/102
+
+export NLS_LANG=American_America.KO16KSC5601
+export TNS_ADMIN=$ORACLE_HOME/network/admin
+export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
+export PATH=$PATH:.:/bin:/usr/bin:/usr/sbin:/etc:/opt/bin:/usr/ccs/bin:/usr/local/bin:$ORACLE_HOME/bin:$ORACLE_HOME/OPatch
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib:$ORACLE_HOME/rdbms/lib
+export SHLIB_PATH=$ORACLE_HOME/lib32:$ORACLE_HOME/rdbms/lib32
+
+CLASSPATH=$ORACLE_HOME/JRE:$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib
+export CLASSPATH=$CLASSPATH:$ORACLE_HOME/network/jlib
+
+
+alias logwww='tail -f /data1/log/was/www/wwwServer1_`date +20'%y%m%d'`.log'
+alias logmobile='tail -f /log/app/mobile/wwwServer1/`date +20'%y%m%d'`.log'
+alias logwww2='tail -f /data1/log/was/www2/wwwServer2.out'
+alias logbo='tail -f /data1/log/was/backoffice/boServer1_`date +20'%y%m%d'`.log'
+alias logsell='tail -f /data1/log/was/sell/sellServer1_`date +20'%y%m%d'`.log'
+alias logif='tail -f /data1/log/was/ifhub/ifhubServer1.out'
+alias logsearch='tail -f /data1/log/was/search/*.out'
+alias logcall='tail -f /data1/log/was/callcenter/*.out'
+alias gowls='cd /weblogic/domains/devdomain/'
+alias goif='cd /data1/ifhub'
+alias LOG='cd /data1/log/was/www'
+alias cls='clear'
+alias l='ls -alp'
+alias ls='ls -CF'
+alias PAS='cd /data1/log/app/pas'
+alias psj='ps -ef | grep java | grep -v grep'
+alias cdw='cd /weblogic/domains/devdomain'
+
+alias psinsp='ps -ef | grep inspesc | grep -v grep'
+alias cdinsp='cd /data1/www/solution/inspesc/bin/class'
+alias cdilog='cd /data1/log/app/inspesc'
+
+###############################################################
+# buywas1
+###############################################################
+alias buywas1='ssh mon@172.18.182.61'
+
+umask 002
+
+export TMOUT=0
+

@@ -1,0 +1,33 @@
+/*  머천트 리뷰 중 회원 정보 변경된 건의 회원번호를 추적하여 업데이트  
+    스테이지 실행 시간 : 30초
+*/
+update /*+ bypass_ujvc */
+(
+    select a.create_no t_OMNo, a.mm_mem_no t_MMNo, c.mem_no o_MMNo, m.om_mem_no o_OMNo
+    from tmall.dp_semi_exprt A
+        , beauty_sql.js_review b
+        , merchant.TBL_ME_MEM_hist c
+        , merchant.TBL_ME_MEM m
+    where  REF_SEQ IS NOT NULL and MM_MEM_NO is null
+        and a.ref_seq = b.review_seq
+        and b.userid = c.mem_id
+        and c.mem_no = m.mem_no
+)
+set t_OMNo = O_OMno
+    , T_MMNo = O_MMNo
+;
+
+
+
+/*  머천트 리뷰의 회원 정보 추가 업데이트
+    스테이지 실행 시간 : 4초
+*/
+update /*+ bypass_ujvc */
+(
+select a.create_no T_OMNO, b.create_no O_OMNo from DP_CONT a, 
+    DP_SEMI_EXPRT b
+    where a.cont_no = b.cont_no
+        and a.create_no is null and b.create_no is not null
+)
+SET T_OMNo = O_OMNo
+;

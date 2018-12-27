@@ -1,0 +1,12 @@
+프로시저 어딘가에서 오류가 발생하고 있다면
+다음과 같이 변수값을 뿌려보자. 
+
+DBMS_OUTPUT.PUT_LINE('O_VAR = ' || O_VAR);
+
+
+DECLARE
+  V_TEST VARCHAR2(200);
+BEGIN
+  V_TEST := 'Hello World';
+  DBMS_OUTPUT.PUT_LINE(V_TEST);
+END;

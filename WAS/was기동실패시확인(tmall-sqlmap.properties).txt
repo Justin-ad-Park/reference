@@ -1,0 +1,27 @@
+## 테스트 서버 등에서는 아래 부분처럼 웹로직용으로 변경할 것 ##
+	
+devwas:/data1/www/domain/WEB-INF/classes/skt/tmall/config]vi tmall-sqlmap.properties
+
+## For Tomcat JNDI Datasource Setting
+## JNDI.DataSource.Name = DataSource
+## JNDI.DataSource.Value = java:/comp/env/tMall_DS
+
+## For Weblogic JNDI Datasource Setting
+JNDI.DataSource.Name = DBFullJndiContext
+JNDI.DataSource.Value = TMALL_DS
+
+## For Resin JNDI Datasource Setting
+#JNDI.DataSource.Name = DBFullJndiContext
+#JNDI.DataSource.Value = java:/comp/env/TMALL_DS
+
+
+## 아래와 같은 로그가 나오면서 재기동이 안되는 경우 ##################################################################
+<2014. 1. 20 오후 12시 17분 56초 WIT> <Info> <Management> <BEA-141281> <unable to get file lock, will retry ...> 
+weblogic.management.ManagementException: Unable to obtain lock on /weblogic/domains/frontdomain/servers/frontServer1_1/tmp/frontServer1_1.lok. 
+
+
+kill -9 명령으로 강제로 was process를 kill 시킨 후 
+/weblogic/domains/frontdomain/servers/frontServer1_1/tmp/frontServer1_1.lok 파일을 삭제한다.
+
+이후에는 재기동됨
+

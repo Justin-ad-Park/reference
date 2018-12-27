@@ -1,0 +1,88 @@
+## Weblogic 설정#########################################
+/weblogic/domains/devdomain/config/config.xml
+
+
+## Weblogic 언어 설정###################################
+# weblogic 계정에서 
+cd /weblogic
+cat .bash_profile
+
+아래 설정이 있으면 한국어 설정된 것임
+export LANG=ko_KR.euc-kr
+#export LANG=ko_KR.UTF-8
+
+
+
+
+##WAS 서버 nameserver 연결 처리 방법#####################
+#Root 계정으로 
+vi /etc/resolv.conf
+ 
+nameserver      IP등록(202.152.254.245)
+
+
+
+
+
+cdw  => 웹로직 경로 이동
+./startA	=> 웹로직 어드민(실행되 있어야 서버 시작,재시작 등 가능)
+
+./restartWWW	=> 재시작
+
+## Web 로그 확인 ##
+cd /log/app/front/wwwServer1
+tail -f tmall_~~~.log
+
+
+##	실행중인 프로세스 검색
+ps -ef |grep java |grep www
+kill -9 프로세스번호
+
+
+## 배치 실행 ##
+cd ~weblogic
+cd batch/bin/shg/
+sh restartShg.sh
+
+
+## 배치 종료 ##
+ps -ef|grep batch
+kill -9 프로세스번호
+
+
+
+## BATCH Job을 새로운 WAS에 적용 ##
+220.103.232.236 에서  mon / qhdks
+
+-bash-3.2$ cd ~weblogic
+-bash-3.2$ ls
+-bash-3.2$ cd batch		=> 이 폴더를 옮긴다.
+
+
+FTP 220.103.232.236 의
+/weblogic/batch 를 로컬로 복사 (log는 제외)
+
+FTP 220.103.232.237
+/weblogic/ 에 batch 폴더를 통째로 복사
+
+
+
+
+## weblogic JSP 자동 reload 설정 #############################################
+#
+# survlet은 자동 재기동 안하고 JSP는 10초 마다 변경 체크 하는 경우 (-1 안함, 0 즉시, 1~ xx 초 이후 갱신)
+ <container-descriptor>
+   <servlet-reload-check-secs>-1</servlet-reload-check-secs>
+ </container-descriptor>
+
+ <jsp-descriptor>
+   <jsp-param>
+     <param-name>keepgenerated</param-name>
+     <param-value>true</param-value>
+   </jsp-param>
+   <jsp-param>
+     <param-name>page-check-seconds</param-name>
+     <param-value>10</param-value>
+   </jsp-param>
+ </jsp-descriptor>
+ 

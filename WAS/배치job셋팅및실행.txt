@@ -1,0 +1,52 @@
+## 배치 실행 ##
+cd ~weblogic/batch/bin/shg/
+sh restartShg.sh
+
+sh restartRebuild.sh
+
+## 배치 종료 ##
+ps -ef|grep batch
+kill -9 프로세스번호
+
+##TMBatch1 서버 이관##
+tmbatch1 220.103.231.238
+
+
+## 배치 프로세스 검색##
+ps -ef|grep SchedulerInitiator
+
+ps -ef|grep RebuildHtml
+
+
+TMBatch : xpa&tmb51
+
+## 배치 로그 폴더 ##
+#Console Out Log
+/weblogic/batch/logs/shg/00_out/
+
+#HTML Gen
+/weblogic/batch/logs/shg/01_out/
+
+#Rebuilder 
+/weblogic/batch/logs/shg/02_shg_rebuild/
+
+#Slim Image Convertor 
+/weblogic/batch/logs/shg/03_shg_plug/
+
+
+
+## BATCH Job을 새로운 WAS에 적용 ##
+220.103.232.236 에서  mon / qhdks
+
+-bash-3.2$ cd ~weblogic
+-bash-3.2$ ls
+-bash-3.2$ cd batch		=> 이 폴더를 옮긴다.
+
+
+
+FTP 220.103.232.236 의
+/weblogic/batch 를 로컬로 복사 (log는 제외)
+
+FTP 220.103.232.237
+/weblogic/ 에 batch 폴더를 통째로 복사
+

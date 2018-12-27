@@ -1,0 +1,95 @@
+Rename tables, columns and constraints in Oracle
+In more recent versions of Oracle you can rename tables, columns and constraints. Here are examples of the syntax: 
+
+
+ALTER TABLE table_name RENAME COLUMN column_name TO
+new_column_name; (from Oracle9i Release 2)
+
+ALTER TABLE table_name RENAME TO new_table_name;
+
+ALTER TABLE table_name RENAME CONSTRAINT
+constraint_name TO new_constraint_name;
+
+ALTER INDEX index_name RENAME TO new_index_name;
+
+It's also possible to drop a column:
+ALTER TABLE table_name DROP COLUMN column_name;
+
+
+
+#####################테스트를 위한 테이블 생성################################
+SQL> create table test (
+  2  name varchar(10)
+  3  );
+
+테이블이 생성되었습니다.
+
+SQL> desc test;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+
+ NAME                                               VARCHAR2(10)
+###########################################################################
+
+
+############### test table에 osy란 number(10)타입의 컬럼 추가 ######################
+SQL> alter table test add(osy number(10));
+
+테이블이 변경되었습니다.
+
+SQL> desc test;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+
+ NAME                                               VARCHAR2(10)
+ OSY                                                NUMBER(10)
+
+
+
+###########################################################################
+
+
+
+##############test table에 osy컬럼명을 osy79로 컬럼명 변경 #########################
+SQL> alter table test rename column osy to osy79;
+
+테이블이 변경되었습니다.
+
+SQL> desc test;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+
+ NAME                                               VARCHAR2(10)
+ OSY79                                              NUMBER(10)
+
+#############################################################################
+
+
+
+#################test table에 osy79로 컬럼 데이터 타입 변경 ##########################
+SQL> alter table test modify(osy79 varchar(10));
+
+테이블이 변경되었습니다.
+
+SQL> desc test
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+
+ NAME                                               VARCHAR2(10)
+ OSY79                                              VARCHAR2(10)
+############################################################################# 
+
+
+######################test table에 osy79로 컬럼 삭제 ###############################
+
+SQL> alter table test drop(osy79);
+
+테이블이 변경되었습니다.
+
+SQL> desc test;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+
+ NAME                                               VARCHAR2(10)
+
+##############################################################################

@@ -1,0 +1,7 @@
+logwww
+
+
+cd /log/app/front/wwwServer1
+tail -f tmall_2009-
+
+tail -f tmall_~~~.log

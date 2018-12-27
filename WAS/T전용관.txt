@@ -1,0 +1,227 @@
+skmwas1:/weblogic/domains/phonedomain]cd config
+skmwas1:/weblogic/domains/phonedomain/config]ls
+config.lok                     config.xml.20080105*           config.xml_20071129*           jms/
+config.xml                     config.xml.20090616_logLevel*  configCache/                   lib/
+config.xml.090423*             config.xml.org*                deployments/                   nodemanager/
+config.xml.090622              config.xml.thread*             diagnostics/                   security/
+config.xml.20071210*           config.xml.tmp*                jdbc/                          startup/
+skmwas1:/weblogic/domains/phonedomain/config]vi config.xml
+"config.xml" 346 มู, 15413 ภฺ 
+<?xml version='1.0' encoding='UTF-8'?>
+<domain xmlns="http://www.bea.com/ns/weblogic/920/domain" xmlns:sec="http://www.bea.com/ns/weblogic/90/security" xmlns:xsi="http://
+www.w3.org/2001/XMLSchema-instance" xmlns:wls="http://www.bea.com/ns/weblogic/90/security/wls" xsi:schemaLocation="http://www.bea.c
+om/ns/weblogic/90/security/xacml http://www.bea.com/ns/weblogic/90/security/xacml.xsd http://www.bea.com/ns/weblogic/90/security ht
+tp://www.bea.com/ns/weblogic/90/security.xsd http://www.bea.com/ns/weblogic/920/domain http://www.bea.com/ns/weblogic/920/domain.xs
+d http://www.bea.com/ns/weblogic/90/security/wls http://www.bea.com/ns/weblogic/90/security/wls.xsd">
+  <name>phonedomain</name>
+  <domain-version>9.2.3.0</domain-version>
+  <security-configuration>
+    <name>phonedomain</name>
+    <realm>
+      <sec:authentication-provider xsi:type="wls:default-authenticatorType"></sec:authentication-provider>
+      <sec:authentication-provider xsi:type="wls:default-identity-asserterType">
+        <sec:active-type>AuthenticatedUser</sec:active-type>
+      </sec:authentication-provider>
+      <sec:role-mapper xmlns:xac="http://www.bea.com/ns/weblogic/90/security/xacml" xsi:type="xac:xacml-role-mapperType"></sec:role
+-mapper>
+      <sec:authorizer xmlns:xac="http://www.bea.com/ns/weblogic/90/security/xacml" xsi:type="xac:xacml-authorizerType"></sec:author
+izer>
+      <sec:adjudicator xsi:type="wls:default-adjudicatorType"></sec:adjudicator>
+      <sec:credential-mapper xsi:type="wls:default-credential-mapperType"></sec:credential-mapper>
+      <sec:cert-path-provider xsi:type="wls:web-logic-cert-path-providerType"></sec:cert-path-provider>
+      <sec:cert-path-builder>WebLogicCertPathProvider</sec:cert-path-builder>
+      <sec:user-lockout-manager>
+        <sec:lockout-threshold>8</sec:lockout-threshold>
+        <sec:lockout-duration>40</sec:lockout-duration>
+        <sec:lockout-reset-duration>40</sec:lockout-reset-duration>
+      </sec:user-lockout-manager>
+      <sec:name>myrealm</sec:name>
+    </realm>
+    <default-realm>myrealm</default-realm>
+    <credential-encrypted>{3DES}OT+N/WQ3kZQVdwBQpgKEO+KaM1yTmtp/Vmt3IhkSHuPLJkOuPoeTJRx7/13Xhj45+lkSrClxj2sN9FTRt7XYk5t1A+3fGcFR</c
+redential-encrypted>
+    <node-manager-username>phoneadmin</node-manager-username>
+    <node-manager-password-encrypted>{3DES}kI+NdJbS5VCuvu0ZqkGFmw==</node-manager-password-encrypted>
+  </security-configuration>
+  <jta>
+    <timeout-seconds>120</timeout-seconds>
+  </jta>
+  <log>
+    <file-name>/log/weblogics/phonedomain.log</file-name>
+    <number-of-files-limited>true</number-of-files-limited>
+    <file-count>10</file-count>
+    <file-min-size>5000</file-min-size>
+    <rotate-log-on-startup>false</rotate-log-on-startup>
+    <log4j-logging-enabled>false</log4j-logging-enabled>
+  </log>
+  <server>
+    <name>phoneAdmin</name>
+    <max-http-message-size>10240000</max-http-message-size>
+    <complete-message-timeout>480</complete-message-timeout>
+/phoneSer
+    <log>
+      <file-name>/log/weblogics/phoneAdmin/phoneAdmin.log</file-name>
+      <rotation-type>byTime</rotation-type>
+      <number-of-files-limited>true</number-of-files-limited>
+      <file-count>10</file-count>
+      <rotation-time>23:59</rotation-time>
+      <rotate-log-on-startup>false</rotate-log-on-startup>
+      <log-file-severity>Warning</log-file-severity>
+      <domain-log-broadcast-severity>Off</domain-log-broadcast-severity>
+    </log>
+    <listen-port>8010</listen-port>
+    <web-server>
+      <web-server-log>
+        <file-name>/log/weblogics/phoneAdmin/access.log</file-name>
+        <rotation-type>byTime</rotation-type>
+        <number-of-files-limited>true</number-of-files-limited>
+        <file-count>15</file-count>
+        <rotation-time>23:59</rotation-time>
+        <elf-fields xsi:nil="true"></elf-fields>
+      </web-server-log>
+    </web-server>
+    <listen-address></listen-address>
+  </server>
+  <server>
+    <name>phoneServer1_1</name>
+    <max-http-message-size>10240000</max-http-message-size>
+    <complete-message-timeout>480</complete-message-timeout>
+    <ssl>
+      <enabled>false</enabled>
+      <login-timeout-millis>25000</login-timeout-millis>
+    </ssl>
+    <log>
+      <file-name>/log/weblogics/phoneServer1_1/phoneServer1_1.log</file-name>
+      <rotation-type>bySize</rotation-type>
+      <number-of-files-limited>true</number-of-files-limited>
+      <file-count>5</file-count>
+      <rotation-time>23:59</rotation-time>
+      <file-min-size>50000</file-min-size>
+      <rotate-log-on-startup>false</rotate-log-on-startup>
+      <log-file-severity>Warning</log-file-severity>
+      <stdout-severity>Error</stdout-severity>
+      <domain-log-broadcast-severity>Off</domain-log-broadcast-severity>
+      <memory-buffer-severity>Off</memory-buffer-severity>
+      <log4j-logging-enabled>false</log4j-logging-enabled>
+      <redirect-stdout-to-server-log-enabled>true</redirect-stdout-to-server-log-enabled>
+    </log>
+    <execute-queue>
+      <name>default</name>
+      <thread-count>70</thread-count>
+      <threads-maximum>70</threads-maximum>
+      <threads-minimum>70</threads-minimum>
+    </execute-queue>
+    <use81-style-execute-queues>true</use81-style-execute-queues>
+    <machine xsi:nil="true"></machine>
+    <listen-port>9601</listen-port>
+    <cluster xsi:nil="true"></cluster>
+    <web-server>
+      <web-server-log>
+        <file-name>/log/weblogics/phoneServer1_1/access.log</file-name>
+        <rotation-type>bySize</rotation-type>
+        <number-of-files-limited>true</number-of-files-limited>
+        <file-count>5</file-count>
+        <rotation-time>23:59</rotation-time>
+        <file-min-size>50000</file-min-size>
+        <elf-fields xsi:nil="true"></elf-fields>
+      </web-server-log>
+    </web-server>
+    <listen-address></listen-address>
+    <accept-backlog>200</accept-backlog>
+    <weblogic-plugin-enabled>true</weblogic-plugin-enabled>
+  </server>
+  <server>
+    <name>phoneServer2_1</name>
+    <max-http-message-size>10240000</max-http-message-size>
+    <complete-message-timeout>480</complete-message-timeout>
+    <ssl>
+      <enabled>false</enabled>
+      <login-timeout-millis>25000</login-timeout-millis>
+    </ssl>
+    <log>
+      <file-name>/log/weblogics/phoneServer2_1/phoneServer2_1.log</file-name>
+      <rotation-type>bySize</rotation-type>
+      <number-of-files-limited>true</number-of-files-limited>
+      <file-count>5</file-count>
+      <rotation-time>23:59</rotation-time>
+      <file-min-size>50000</file-min-size>
+      <rotate-log-on-startup>false</rotate-log-on-startup>
+      <log-file-severity>Warning</log-file-severity>
+      <stdout-severity>Error</stdout-severity>
+      <domain-log-broadcast-severity>Off</domain-log-broadcast-severity>
+      <memory-buffer-severity>Error</memory-buffer-severity>
+      <log4j-logging-enabled>false</log4j-logging-enabled>
+      <redirect-stdout-to-server-log-enabled>true</redirect-stdout-to-server-log-enabled>
+    </log>
+    <execute-queue>
+      <name>default</name>
+      <thread-count>70</thread-count>
+      <threads-maximum>70</threads-maximum>
+      <threads-minimum>70</threads-minimum>
+    </execute-queue>
+    <use81-style-execute-queues>true</use81-style-execute-queues>
+    <machine xsi:nil="true"></machine>
+    <listen-port>9601</listen-port>
+    <cluster xsi:nil="true"></cluster>
+    <web-server>
+      <web-server-log>
+        <file-name>/log/weblogics/phoneServer2_1/access.log</file-name>
+        <rotation-type>bySize</rotation-type>
+        <number-of-files-limited>true</number-of-files-limited>
+        <file-count>5</file-count>
+        <rotation-time>23:59</rotation-time>
+        <file-min-size>50000</file-min-size>
+        <elf-fields xsi:nil="true"></elf-fields>
+      </web-server-log>
+/deploy
+      <domain-log-broadcast-severity>Off</domain-log-broadcast-severity>
+      <memory-buffer-severity>Off</memory-buffer-severity>
+      <log4j-logging-enabled>false</log4j-logging-enabled>
+      <redirect-stdout-to-server-log-enabled>true</redirect-stdout-to-server-log-enabled>
+    </log>
+    <use81-style-execute-queues>true</use81-style-execute-queues>
+    <machine xsi:nil="true"></machine>
+    <listen-port>9603</listen-port>
+    <cluster xsi:nil="true"></cluster>
+    <web-server>
+      <web-server-log>
+        <file-name>/log/weblogics/frontServer.log</file-name>
+      </web-server-log>
+    </web-server>
+    <listen-address></listen-address>
+    <accept-backlog>200</accept-backlog>
+    <weblogic-plugin-enabled>true</weblogic-plugin-enabled>
+  </server>
+  <production-mode-enabled>true</production-mode-enabled>
+  <embedded-ldap>
+    <name>phonedomain</name>
+    <credential-encrypted>{3DES}vaIYQ1JJlZ2zEui+oEil8nLSp6HcSB4tsIKFtUIz2zY=</credential-encrypted>
+  </embedded-ldap>
+  <configuration-version>9.2.3.0</configuration-version>
+  <app-deployment>
+    <name>phone</name>
+    <target>phoneServer1_1,phoneServer2_1</target>
+    <module-type>war</module-type>
+    <source-path>/data1/www/phone</source-path>
+    <security-dd-model>DDOnly</security-dd-model>
+    <staging-mode>nostage</staging-mode>
+  </app-deployment>
+  <app-deployment>
+    <name>phonebo</name>
+    <target>phoneServer1_2,phoneServer2_2</target>
+    <module-type>war</module-type>
+    <source-path>/data1/www/phonebo</source-path>
+    <security-dd-model>DDOnly</security-dd-model>
+    <staging-mode>nostage</staging-mode>
+  </app-deployment>
+  <app-deployment>
+    <name>front2</name>
+    <target>frontServer</target>
+    <module-type>war</module-type>
+    <source-path>/data1/www/front2</source-path>
+    <security-dd-model>DDOnly</security-dd-model>
+    <staging-mode>nostage</staging-mode>
+  </app-deployment>
+  <admin-server-name>phoneAdmin</admin-server-name>
+  <jdbc-system-resource>
+    <name>TMALL_DataSource</name>

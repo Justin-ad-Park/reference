@@ -1,0 +1,8 @@
+
+select * from user_constraints where constraint_name = 'SYS_C0023646';
+
+그리고 결과값중 table_name 과 constraint_type 칼럼의 정보를 이용해 문제를 쉽게 해결할 수 있다.. 
+
+그리고 만일 제약조건을 없애버리고 싶다면 다음과 같은 쿼리를 이용하자.. 
+
+ALTER TABLE table_name DROP CONSTRAINT constraint_name ;

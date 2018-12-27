@@ -1,0 +1,35 @@
+<u></u>SecureCRT 설치 후 telnet으로 웹서버 접속
+
+cdw  => 웹로직 경로 이동
+./restartWWW	=> 재시작
+
+
+[참고]
+alias	=> 웹로직 alias 검색
+
+
+cd /weblogic/domains/devdomain
+./restartWWW
+
+
+
+##	실행중인 프로세스 검색
+ps -ef |grep java |grep www
+
+kill -9 프로세스번호
+
+
+
+
+##	WAS 로그 확인
+cd /
+cd log
+cd app
+cd front
+cd wwwServer1
+tail -f tmall_~~~.log
+
+#또는
+
+cd /log/app/front/wwwServer1
+tail -f tmall_~~~.log

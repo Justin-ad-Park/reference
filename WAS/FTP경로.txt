@@ -1,0 +1,28 @@
+## 기본 웹서버 경로 ##
+/data1/www
+
+
+## BATCH Job을 새로운 WAS에 적용 ##
+
+FTP 220.103.232.236 의
+/weblogic/batch 를 로컬로 복사 (log는 제외)
+
+FTP 220.103.232.237
+/weblogic/ 에 batch 폴더를 통째로 복사
+
+
+
+## batch job start 방법 ##
+
+220.103.232.236 에서  mon / qhdks
+
+-bash-3.2$ cd ~weblogic/batch		=> 이 폴더를 옮긴다.
+
+
+-bash-3.2$ cd bin/shg
+-bash-3.2$ ls
+	gentest_log4j.xml        restartRebuild.sh        shgTester.sh
+	gentest_log4j_local.xml  restartShg.sh            slimImage.sh
+	rebuildBatch.sh          shgBatch.sh
+
+-bash-3.2$ ./restartShg

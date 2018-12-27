@@ -1,0 +1,788 @@
+[HEADER]
+VERSION=5.0.5
+TOOL=Plan Tool
+CHAR=ASCII
+DATE=2012-11-14 11:46
+[WORKSPACE]
+COUNT=4
+SCHEMA=
+OPTIMIZER=
+NAME=Original
+STMT=113
+SELECT /* CallEmergencyControl.xml, callemergencycontrol.getTotalRecCnt ¹Ú±¤µÎ 2009.06.18   Æ©´×:±èÅÂ¿ì (ÃÖÃÊ:±èÈñ¼º, 2007.10.24, 01) */
+       COUNT(distinct emer_ntce_seq) AS cnt
+from   (SELECT /*+ leading(t6 t1 t2 t3)*/
+               t1.emer_ntce_seq
+        FROM   cc_emer_ntce t1,
+               tr_ord t2,
+               tr_ord_prd t3,
+               cc_emer_ctnt t4,
+               mb_mem t5,
+               sy_emp t6,
+               mb_mem t7
+        WHERE  t6.emp_no=:1
+        AND    t1.ord_no = t2.ord_no(+)
+        AND    t1.ord_prd_seq = t3.ord_prd_seq(+)
+        AND    t1.ord_no = t3.ord_no(+)
+        AND    t1.mem_no = t5.mem_no
+        AND    t1.emp_no = t6.emp_no
+        AND    t1.emer_ntce_seq = t4.emer_ntce_seq
+        AND    t2.buy_mem_no = t7.mem_no(+)
+        AND    t1.create_dept_cd = '02'
+        AND    t4.emer_ctnt_seq = '1'
+        AND    TO_CHAR(t4.create_dt, 'YYYY/MM/DD') >= :2
+        AND    TO_CHAR(t4.create_dt, 'YYYY/MM/DD') <= :3
+        UNION ALL
+        SELECT /*+ leading(t2)*/
+        t1.emer_ntce_seq
+        FROM   cc_emer_ntce t1,
+               tr_ord t2,
+               tr_ord_prd t3,
+               cc_emer_ctnt t4,
+               mb_mem t5,
+               sy_emp t6,
+               mb_mem t7
+        WHERE  t2.buy_mem_no=:4
+        AND    t1.ord_no = t2.ord_no(+)
+        AND    t1.ord_prd_seq = t3.ord_prd_seq(+)
+        AND    t1.ord_no = t3.ord_no(+)
+        AND    t1.mem_no = t5.mem_no
+        AND    t1.emp_no = t6.emp_no
+        AND    t1.emer_ntce_seq = t4.emer_ntce_seq
+        AND    t2.buy_mem_no = t7.mem_no(+)
+        AND    t1.create_dept_cd = '02'
+        AND    t4.emer_ctnt_seq = '1'
+        AND    TO_CHAR(t4.create_dt, 'YYYY/MM/DD') >= :5
+        AND    TO_CHAR(t4.create_dt, 'YYYY/MM/DD') <= :6 ) 
+        
+
+
+
+begin
+:v1 := '3005';
+:v2 := '2009/06/23';
+:v3 := '2009/07/23';
+:v4 := '14179697';
+:v5 := '2009/06/23';
+:v6 := '2009/07/23';
+end;
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.02       0.02          0          0          0           0
+Fetch        2      0.01       0.01          0       2173          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.03       0.03          0       2173          0           1
+
+Misses in library cache during parse: 1
+Misses in library cache during execute: 1
+Optimizer mode: FIRST_ROWS
+Parsing user id: 120
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  SORT GROUP BY (cr=2173 pr=0 pw=0 time=13366 us)
+    147   VIEW  (cr=2173 pr=0 pw=0 time=13137 us)
+    147    UNION-ALL  (cr=2173 pr=0 pw=0 time=13136 us)
+    145     FILTER  (cr=2131 pr=0 pw=0 time=12806 us)
+    145      NESTED LOOPS OUTER (cr=2131 pr=0 pw=0 time=12661 us)
+    145       NESTED LOOPS  (cr=1839 pr=0 pw=0 time=11351 us)
+    145        NESTED LOOPS  (cr=1547 pr=0 pw=0 time=10041 us)
+    155         NESTED LOOPS OUTER (cr=1234 pr=0 pw=0 time=7184 us)
+    155          NESTED LOOPS OUTER (cr=769 pr=0 pw=0 time=4855 us)
+    155           NESTED LOOPS  (cr=149 pr=0 pw=0 time=1585 us)
+      1            INDEX UNIQUE SCAN PK_CM_EMP (cr=2 pr=0 pw=0 time=14 us)(object id 279109)
+    155            TABLE ACCESS BY INDEX ROWID CC_EMER_NTCE (cr=147 pr=0 pw=0 time=1569 us)
+    155             INDEX RANGE SCAN IX5_CC_EMER_NTCE (cr=4 pr=0 pw=0 time=43 us)(object id 347268)
+    155           PARTITION RANGE ITERATOR PARTITION: KEY KEY (cr=620 pr=0 pw=0 time=3073 us)
+    155            TABLE ACCESS BY LOCAL INDEX ROWID TR_ORD PARTITION: KEY KEY (cr=620 pr=0 pw=0 time=2539 us)
+    155             INDEX UNIQUE SCAN PK_TR_ORD PARTITION: KEY KEY (cr=465 pr=0 pw=0 time=1543 us)(object id 278173)
+    155          PARTITION RANGE ITERATOR PARTITION: KEY KEY (cr=465 pr=0 pw=0 time=2109 us)
+    155           INDEX UNIQUE SCAN PK_TR_ORD_PRD PARTITION: KEY KEY (cr=465 pr=0 pw=0 time=1556 us)(object id 278234)
+    145         INDEX RANGE SCAN IX2_CC_EMER_CTNT (cr=313 pr=0 pw=0 time=2777 us)(object id 348742)
+    145        INDEX UNIQUE SCAN PK_MB_MEM (cr=292 pr=0 pw=0 time=1101 us)(object id 278968)
+    145       INDEX UNIQUE SCAN PK_MB_MEM (cr=292 pr=0 pw=0 time=1292 us)(object id 278968)
+      2     FILTER  (cr=42 pr=0 pw=0 time=188 us)
+      2      NESTED LOOPS OUTER (cr=42 pr=0 pw=0 time=185 us)
+      2       NESTED LOOPS OUTER (cr=36 pr=0 pw=0 time=161 us)
+      2        NESTED LOOPS  (cr=30 pr=0 pw=0 time=141 us)
+      2         NESTED LOOPS  (cr=24 pr=0 pw=0 time=127 us)
+      2          NESTED LOOPS  (cr=20 pr=0 pw=0 time=112 us)
+      2           NESTED LOOPS  (cr=14 pr=0 pw=0 time=89 us)
+      2            TABLE ACCESS BY GLOBAL INDEX ROWID TR_ORD PARTITION: ROW LOCATION ROW LOCATION (cr=6 pr=0 pw=0 time=40 us)
+      2             INDEX RANGE SCAN IX3_TR_ORD (cr=4 pr=0 pw=0 time=27 us)(object id 278202)
+      2            TABLE ACCESS BY INDEX ROWID CC_EMER_NTCE (cr=8 pr=0 pw=0 time=45 us)
+      2             INDEX RANGE SCAN IX4_CC_EMER_NTCE (cr=6 pr=0 pw=0 time=32 us)(object id 333042)
+      2           INDEX RANGE SCAN IX2_CC_EMER_CTNT (cr=6 pr=0 pw=0 time=21 us)(object id 348742)
+      2          INDEX UNIQUE SCAN PK_CM_EMP (cr=4 pr=0 pw=0 time=12 us)(object id 279109)
+      2         INDEX UNIQUE SCAN PK_MB_MEM (cr=6 pr=0 pw=0 time=13 us)(object id 278968)
+      2        INDEX UNIQUE SCAN PK_MB_MEM (cr=6 pr=0 pw=0 time=17 us)(object id 278968)
+      2       PARTITION RANGE ITERATOR PARTITION: KEY KEY (cr=6 pr=0 pw=0 time=22 us)
+      2        INDEX UNIQUE SCAN PK_TR_ORD_PRD PARTITION: KEY KEY (cr=6 pr=0 pw=0 time=14 us)(object id 278234)
+
+VAR=0
+TREE=0
+TEXT=1
+
+GRID=0,0
+SCHEMA=1
+
+TRACE=1
+
+NAME=Tuning 2
+STMT=100
+SELECT /* CallEmergencyControl.xml, callemergencycontrol.getTotalRecCnt ¹Ú±¤µÎ 2009.06.18   Æ©´×:±èÅÂ¿ì (ÃÖÃÊ:±èÈñ¼º, 2007.10.24, 01) */
+       COUNT(distinct emer_ntce_seq) AS cnt
+from   (SELECT /*+ leading(t6 t1 t2 t3)*/
+               t1.emer_ntce_seq
+        FROM   cc_emer_ntce t1,
+               tr_ord t2,
+               tr_ord_prd t3,
+               cc_emer_ctnt t4,
+               mb_mem t5,
+               sy_emp t6,
+               mb_mem t7
+        WHERE  t6.emp_no=3005
+        AND    t1.ord_no = t2.ord_no(+)
+        AND    t1.ord_prd_seq = t3.ord_prd_seq(+)
+        AND    t1.ord_no = t3.ord_no(+)
+        AND    t1.mem_no = t5.mem_no
+        AND    t1.emp_no = t6.emp_no
+        AND    t1.emer_ntce_seq = t4.emer_ntce_seq
+        AND    t2.buy_mem_no = t7.mem_no(+)
+        AND    t1.create_dept_cd = '02'
+        AND    t4.emer_ctnt_seq = '1'
+        AND    TO_CHAR(t4.create_dt, 'YYYY/MM/DD') >= '2009/06/23'
+        AND    TO_CHAR(t4.create_dt, 'YYYY/MM/DD') <= '2009/07/23'
+        UNION ALL
+        SELECT /*+ leading(t2)*/
+        t1.emer_ntce_seq
+        FROM   cc_emer_ntce t1,
+               tr_ord t2,
+               tr_ord_prd t3,
+               cc_emer_ctnt t4,
+               mb_mem t5,
+               sy_emp t6,
+               mb_mem t7
+        WHERE  t2.buy_mem_no=14179697
+        AND    t1.ord_no = t2.ord_no(+)
+        AND    t1.ord_prd_seq = t3.ord_prd_seq(+)
+        AND    t1.ord_no = t3.ord_no(+)
+        AND    t1.mem_no = t5.mem_no
+        AND    t1.emp_no = t6.emp_no
+        AND    t1.emer_ntce_seq = t4.emer_ntce_seq
+        AND    t2.buy_mem_no = t7.mem_no(+)
+        AND    t1.create_dept_cd = '02'
+        AND    t4.emer_ctnt_seq = '1'
+        AND    TO_CHAR(t4.create_dt, 'YYYY/MM/DD') >= '2009/06/23'
+        AND    TO_CHAR(t4.create_dt, 'YYYY/MM/DD') <= '2009/07/23' ) ;
+        
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.02       0.02          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.02       0.01          0       2173          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.04       0.03          0       2173          0           1
+
+Misses in library cache during parse: 1
+Optimizer mode: FIRST_ROWS
+Parsing user id: 120  (TMALL)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  SORT GROUP BY (cr=2173 pr=0 pw=0 time=12858 us)
+    147   VIEW  (cr=2173 pr=0 pw=0 time=11742 us)
+    147    UNION-ALL  (cr=2173 pr=0 pw=0 time=11741 us)
+    145     NESTED LOOPS OUTER (cr=2131 pr=0 pw=0 time=11443 us)
+    145      NESTED LOOPS  (cr=1839 pr=0 pw=0 time=9850 us)
+    145       NESTED LOOPS  (cr=1547 pr=0 pw=0 time=7532 us)
+    155        NESTED LOOPS OUTER (cr=1234 pr=0 pw=0 time=5781 us)
+    155         NESTED LOOPS OUTER (cr=769 pr=0 pw=0 time=3763 us)
+    155          NESTED LOOPS  (cr=149 pr=0 pw=0 time=1121 us)
+      1           INDEX UNIQUE SCAN PK_CM_EMP (cr=2 pr=0 pw=0 time=14 us)(object id 279109)
+    155           TABLE ACCESS BY INDEX ROWID CC_EMER_NTCE (cr=147 pr=0 pw=0 time=1107 us)
+    155            INDEX RANGE SCAN IX5_CC_EMER_NTCE (cr=4 pr=0 pw=0 time=172 us)(object id 347268)
+    155          PARTITION RANGE ITERATOR PARTITION: KEY KEY (cr=620 pr=0 pw=0 time=2529 us)
+    155           TABLE ACCESS BY LOCAL INDEX ROWID TR_ORD PARTITION: KEY KEY (cr=620 pr=0 pw=0 time=2149 us)
+    155            INDEX UNIQUE SCAN PK_TR_ORD PARTITION: KEY KEY (cr=465 pr=0 pw=0 time=1467 us)(object id 278173)
+    155         PARTITION RANGE ITERATOR PARTITION: KEY KEY (cr=465 pr=0 pw=0 time=1863 us)
+    155          INDEX UNIQUE SCAN PK_TR_ORD_PRD PARTITION: KEY KEY (cr=465 pr=0 pw=0 time=1527 us)(object id 278234)
+    145        INDEX RANGE SCAN IX2_CC_EMER_CTNT (cr=313 pr=0 pw=0 time=1721 us)(object id 348742)
+    145       INDEX UNIQUE SCAN PK_MB_MEM (cr=292 pr=0 pw=0 time=1087 us)(object id 278968)
+    145      INDEX UNIQUE SCAN PK_MB_MEM (cr=292 pr=0 pw=0 time=1193 us)(object id 278968)
+      2     NESTED LOOPS OUTER (cr=42 pr=0 pw=0 time=1237 us)
+      2      NESTED LOOPS OUTER (cr=36 pr=0 pw=0 time=142 us)
+      2       NESTED LOOPS  (cr=30 pr=0 pw=0 time=122 us)
+      2        NESTED LOOPS  (cr=24 pr=0 pw=0 time=110 us)
+      2         NESTED LOOPS  (cr=20 pr=0 pw=0 time=96 us)
+      2          NESTED LOOPS  (cr=14 pr=0 pw=0 time=70 us)
+      2           TABLE ACCESS BY GLOBAL INDEX ROWID TR_ORD PARTITION: ROW LOCATION ROW LOCATION (cr=6 pr=0 pw=0 time=27 us)
+      2            INDEX RANGE SCAN IX3_TR_ORD (cr=4 pr=0 pw=0 time=16 us)(object id 278202)
+      2           TABLE ACCESS BY INDEX ROWID CC_EMER_NTCE (cr=8 pr=0 pw=0 time=42 us)
+      2            INDEX RANGE SCAN IX4_CC_EMER_NTCE (cr=6 pr=0 pw=0 time=27 us)(object id 333042)
+      2          INDEX RANGE SCAN IX2_CC_EMER_CTNT (cr=6 pr=0 pw=0 time=21 us)(object id 348742)
+      2         INDEX UNIQUE SCAN PK_CM_EMP (cr=4 pr=0 pw=0 time=13 us)(object id 279109)
+      2        INDEX UNIQUE SCAN PK_MB_MEM (cr=6 pr=0 pw=0 time=10 us)(object id 278968)
+      2       INDEX UNIQUE SCAN PK_MB_MEM (cr=6 pr=0 pw=0 time=15 us)(object id 278968)
+      2      PARTITION RANGE ITERATOR PARTITION: KEY KEY (cr=6 pr=0 pw=0 time=1096 us)
+      2       INDEX UNIQUE SCAN PK_TR_ORD_PRD PARTITION: KEY KEY (cr=6 pr=0 pw=0 time=1087 us)(object id 278234)
+
+
+
+VAR=0
+TREE=0
+TEXT=1
+
+GRID=0,0
+SCHEMA=1
+
+TRACE=1
+
+NAME=Union1ºÐ¼®
+STMT=50
+       SELECT /*+ leading(t6 t1 t2 t3)*/
+               t1.emer_ntce_seq
+        FROM   cc_emer_ntce t1,
+               tr_ord t2,
+               tr_ord_prd t3,
+               cc_emer_ctnt t4,
+               mb_mem t5,
+               sy_emp t6,
+               mb_mem t7
+        WHERE  t6.emp_no=:1 ------------------> Call Center Á÷¿ø »ç¿ø¹øÈ£ '3005' 
+        AND    t1.ord_no = t2.ord_no(+)
+        AND    t1.ord_prd_seq = t3.ord_prd_seq(+)
+        AND    t1.ord_no = t3.ord_no(+)
+        AND    t1.mem_no = t5.mem_no
+        AND    t1.emp_no = t6.emp_no
+        AND    t1.emer_ntce_seq = t4.emer_ntce_seq
+        AND    t2.buy_mem_no = t7.mem_no(+)
+        AND    t1.create_dept_cd = '02'
+        AND    t4.emer_ctnt_seq = '1'
+        AND    TO_CHAR(t4.create_dt, 'YYYY/MM/DD') >= :2 --'2009/06/23'
+        AND    TO_CHAR(t4.create_dt, 'YYYY/MM/DD') <= :3 --'2009/07/23'
+        
+    145     FILTER  (cr=2131 pr=0 pw=0 time=12806 us)
+    145      NESTED LOOPS OUTER (cr=2131 pr=0 pw=0 time=12661 us)
+    145       NESTED LOOPS  (cr=1839 pr=0 pw=0 time=11351 us)
+    145        NESTED LOOPS  (cr=1547 pr=0 pw=0 time=10041 us)
+    155         NESTED LOOPS OUTER (cr=1234 pr=0 pw=0 time=7184 us)
+    155          NESTED LOOPS OUTER (cr=769 pr=0 pw=0 time=4855 us)
+    155           NESTED LOOPS  (cr=149 pr=0 pw=0 time=1585 us)
+      1            INDEX UNIQUE SCAN PK_CM_EMP (cr=2 pr=0 pw=0 time=14 us)(object id 279109)             --------------------> 1 : t6 - sy_emp
+    155            TABLE ACCESS BY INDEX ROWID CC_EMER_NTCE (cr=147 pr=0 pw=0 time=1569 us)              --------------------> 2 : t1 - cc_emer_ntce
+    155             INDEX RANGE SCAN IX5_CC_EMER_NTCE (cr=4 pr=0 pw=0 time=43 us)(object id 347268)      
+    155           PARTITION RANGE ITERATOR PARTITION: KEY KEY (cr=620 pr=0 pw=0 time=3073 us)
+    155            TABLE ACCESS BY LOCAL INDEX ROWID TR_ORD PARTITION: KEY KEY (cr=620 pr=0 pw=0 time=2539 us) --------------> 3 : t2 - tr_ord(+)
+    155             INDEX UNIQUE SCAN PK_TR_ORD PARTITION: KEY KEY (cr=465 pr=0 pw=0 time=1543 us)(object id 278173)
+    155          PARTITION RANGE ITERATOR PARTITION: KEY KEY (cr=465 pr=0 pw=0 time=2109 us)
+    155           INDEX UNIQUE SCAN PK_TR_ORD_PRD PARTITION: KEY KEY (cr=465 pr=0 pw=0 time=1556 us)(object id 278234)  -----> 4 : t3 - tr_ord_prd(+)
+    145         INDEX RANGE SCAN IX2_CC_EMER_CTNT (cr=313 pr=0 pw=0 time=2777 us)(object id 348742) -------------------------> 5 : t4 - cc_emer_ctnt 
+    145        INDEX UNIQUE SCAN PK_MB_MEM (cr=292 pr=0 pw=0 time=1101 us)(object id 278968) --------------------------------> 6 : t5 - mb_mem
+    145       INDEX UNIQUE SCAN PK_MB_MEM (cr=292 pr=0 pw=0 time=1292 us)(object id 278968) ---------------------------------> 7 : t7 - mb_mem(+)
+    
+    
+--    t6 - sy_emp -----> t1 - cc_emer_ntce ----------> t2 - tr_ord(+) ------------------------------------> t7 - mb_mem(+)
+           1¸í               155°Ç                          155 °Ç                                               145 °Ç
+                                           ----------> t3 - tr_ord_prd(+)
+                                                            155 °Ç
+                                           ----------> t4 - cc_emer_ctnt (t4.create_dt, t4.emer_ctnt_seq) 
+                                                            145 °Ç
+                                           ----------> t5 - mb_mem
+                                                            145 °Ç
+VAR=0
+TREE=0
+TEXT=1
+
+GRID=0,0
+SCHEMA=1
+
+TRACE=1
+
+NAME=Æ©´×°á°ú
+STMT=96
+SELECT /* CallEmergencyControl.xml, callemergencycontrol.getTotalRecCnt ¹Ú±¤µÎ 2009.06.18   Æ©´×:±èÅÂ¿ì (ÃÖÃÊ:±èÈñ¼º, 2007.10.24, 01) */
+       COUNT(distinct emer_ntce_seq) AS cnt
+from   (SELECT --/*+ leading(t6 t1 t2 t3)*/
+               t1.emer_ntce_seq
+        FROM   cc_emer_ntce t1,
+--               tr_ord t2,
+--               tr_ord_prd t3,
+               cc_emer_ctnt t4,
+               mb_mem t5,
+               sy_emp t6  --,
+--               mb_mem t7
+        WHERE  t1.emp_no=3005                      --------------> ¼öÁ¤ (t6  ----> t1)
+--        AND    t1.ord_no = t2.ord_no(+)
+--        AND    t1.ord_prd_seq = t3.ord_prd_seq(+)
+--        AND    t1.ord_no = t3.ord_no(+)
+        AND    t1.mem_no = t5.mem_no
+        AND    t1.emp_no = t6.emp_no
+        AND    t1.emer_ntce_seq = t4.emer_ntce_seq
+--        AND    t2.buy_mem_no = t7.mem_no(+)
+        AND    t1.create_dept_cd = '02'
+        AND    t4.emer_ctnt_seq = '1'
+        AND    t1.create_dt >= TO_DATE('2009/06/23', 'YYYY/MM/DD')   -----> ¼öÁ¤ (ÁÂº¯º¯Çü ¿ìº¯À¸·Î Ä¡È¯)
+        AND    t1.create_dt <= TO_DATE('2009/07/23', 'YYYY/MM/DD')   -----> ¼öÁ¤ (t4¸¦ t1À¸·Î)
+        UNION ALL
+        SELECT /*+ leading(t2)*/
+        t1.emer_ntce_seq
+        FROM   cc_emer_ntce t1,
+               tr_ord t2,
+--               tr_ord_prd t3,
+               cc_emer_ctnt t4,
+               mb_mem t5,
+               sy_emp t6 --,
+--               mb_mem t7
+        WHERE  t2.buy_mem_no=14179697
+        AND    t1.ord_no = t2.ord_no(+)
+--        AND    t1.ord_prd_seq = t3.ord_prd_seq(+)
+--        AND    t1.ord_no = t3.ord_no(+)
+        AND    t1.mem_no = t5.mem_no
+        AND    t1.emp_no = t6.emp_no
+        AND    t1.emer_ntce_seq = t4.emer_ntce_seq
+--        AND    t2.buy_mem_no = t7.mem_no(+)
+        AND    t1.create_dept_cd = '02'
+        AND    t4.emer_ctnt_seq = '1'
+        AND    t1.create_dt >= TO_DATE('2009/06/23', 'YYYY/MM/DD')   -----> ¼öÁ¤ (ÁÂº¯º¯Çü ¿ìº¯À¸·Î Ä¡È¯)
+        AND    t1.create_dt <= TO_DATE('2009/07/23', 'YYYY/MM/DD') )  -----> ¼öÁ¤ (t4¸¦ t1À¸·Î)
+        
+
+--
+--
+--begin
+--:v1 := '3005';
+--:v2 := '2009/06/23';
+--:v3 := '2009/07/23';
+--:v4 := '14179697';
+--:v5 := '2009/06/23';
+--:v6 := '2009/07/23';
+--end;
+--
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.01       0.00          0        753          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.01       0.00          0        753          0           1
+
+Misses in library cache during parse: 0
+Optimizer mode: FIRST_ROWS
+Parsing user id: 120  (TMALL)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  SORT GROUP BY (cr=753 pr=0 pw=0 time=5812 us)
+    147   VIEW  (cr=753 pr=0 pw=0 time=3725 us)
+    147    UNION-ALL  (cr=753 pr=0 pw=0 time=3724 us)
+    145     NESTED LOOPS  (cr=723 pr=0 pw=0 time=3382 us)
+    145      NESTED LOOPS  (cr=431 pr=0 pw=0 time=1783 us)
+    145       NESTED LOOPS  (cr=139 pr=0 pw=0 time=617 us)
+      1        INDEX UNIQUE SCAN PK_CM_EMP (cr=2 pr=0 pw=0 time=14 us)(object id 279109)
+    145        TABLE ACCESS BY INDEX ROWID CC_EMER_NTCE (cr=137 pr=0 pw=0 time=458 us)
+    145         INDEX RANGE SCAN IX5_CC_EMER_NTCE (cr=4 pr=0 pw=0 time=18 us)(object id 347268)
+    145       INDEX UNIQUE SCAN PK_CC_EMER_CTNT (cr=292 pr=0 pw=0 time=2308 us)(object id 275945)
+    145      INDEX UNIQUE SCAN PK_MB_MEM (cr=292 pr=0 pw=0 time=1058 us)(object id 278968)
+      2     NESTED LOOPS  (cr=30 pr=0 pw=0 time=116 us)
+      2      NESTED LOOPS  (cr=24 pr=0 pw=0 time=104 us)
+      2       NESTED LOOPS  (cr=20 pr=0 pw=0 time=92 us)
+      2        NESTED LOOPS  (cr=14 pr=0 pw=0 time=75 us)
+      2         TABLE ACCESS BY GLOBAL INDEX ROWID TR_ORD PARTITION: ROW LOCATION ROW LOCATION (cr=6 pr=0 pw=0 time=28 us)
+      2          INDEX RANGE SCAN IX3_TR_ORD (cr=4 pr=0 pw=0 time=17 us)(object id 278202)
+      2         TABLE ACCESS BY INDEX ROWID CC_EMER_NTCE (cr=8 pr=0 pw=0 time=45 us)
+      2          INDEX RANGE SCAN IX4_CC_EMER_NTCE (cr=6 pr=0 pw=0 time=26 us)(object id 333042)
+      2        INDEX UNIQUE SCAN PK_CC_EMER_CTNT (cr=6 pr=0 pw=0 time=15 us)(object id 275945)
+      2       INDEX UNIQUE SCAN PK_CM_EMP (cr=4 pr=0 pw=0 time=12 us)(object id 279109)
+      2      INDEX UNIQUE SCAN PK_MB_MEM (cr=6 pr=0 pw=0 time=10 us)(object id 278968)
+VAR=0
+TREE=25
+0,1,SELECT STATEMENT Optimizer=FIRST_ROWS,1
+1,1,SORT (GROUP BY) (Card=1 Bytes=13),1
+2,1,VIEW (Cost=15 Card=5 Bytes=65),1
+3,1,UNION-ALL,1
+4,1,FILTER,1
+5,1,NESTED LOOPS (Cost=4 Card=1 Bytes=45),1
+6,1,NESTED LOOPS (Cost=3 Card=1 Bytes=39),1
+7,1,NESTED LOOPS (Cost=2 Card=1 Bytes=30),1
+8,3,INDEX (UNIQUE SCAN) OF 'PK_CM_EMP' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=4),1
+8,2,TABLE ACCESS (BY INDEX ROWID) OF 'CC_EMER_NTCE' (TABLE) (Cost=1 Card=1 Bytes=26),1
+9,3,INDEX (RANGE SCAN) OF 'IX5_CC_EMER_NTCE' (INDEX) (Cost=1 Card=2),1
+7,3,INDEX (UNIQUE SCAN) OF 'PK_CC_EMER_CTNT' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=9),1
+6,3,INDEX (UNIQUE SCAN) OF 'PK_MB_MEM' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=6),1
+4,1,FILTER,1
+5,1,NESTED LOOPS (Cost=11 Card=4 Bytes=284),1
+6,1,NESTED LOOPS (Cost=10 Card=4 Bytes=260),1
+7,1,NESTED LOOPS (Cost=9 Card=4 Bytes=244),1
+8,1,NESTED LOOPS (Cost=8 Card=8 Bytes=416),1
+9,2,TABLE ACCESS (BY GLOBAL INDEX ROWID) OF 'TR_ORD' (TABLE) (Cost=2 Card=9 Bytes=144),1
+10,3,INDEX (RANGE SCAN) OF 'IX3_TR_ORD' (INDEX) (Cost=1 Card=9),1
+9,2,TABLE ACCESS (BY INDEX ROWID) OF 'CC_EMER_NTCE' (TABLE) (Cost=1 Card=1 Bytes=36),1
+10,3,INDEX (RANGE SCAN) OF 'IX4_CC_EMER_NTCE' (INDEX) (Cost=1 Card=2),1
+8,3,INDEX (UNIQUE SCAN) OF 'PK_CC_EMER_CTNT' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=9),1
+7,3,INDEX (UNIQUE SCAN) OF 'PK_CM_EMP' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=4),1
+6,3,INDEX (UNIQUE SCAN) OF 'PK_MB_MEM' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=6),1
+TEXT=27
+Execution Plan
+--------------------------------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=FIRST_ROWS (Cost=15 Card=1 Bytes=13)
+   1    0   SORT (GROUP BY) (Card=1 Bytes=13)
+   2    1     VIEW (Cost=15 Card=5 Bytes=65)
+   3    2       UNION-ALL
+   4    3         FILTER
+   5    4           NESTED LOOPS (Cost=4 Card=1 Bytes=45)
+   6    5             NESTED LOOPS (Cost=3 Card=1 Bytes=39)
+   7    6               NESTED LOOPS (Cost=2 Card=1 Bytes=30)
+   8    7                 INDEX (UNIQUE SCAN) OF 'PK_CM_EMP' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=4)
+   9    7                 TABLE ACCESS (BY INDEX ROWID) OF 'CC_EMER_NTCE' (TABLE) (Cost=1 Card=1 Bytes=26)
+  10    9                   INDEX (RANGE SCAN) OF 'IX5_CC_EMER_NTCE' (INDEX) (Cost=1 Card=2)
+  11    6               INDEX (UNIQUE SCAN) OF 'PK_CC_EMER_CTNT' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=9)
+  12    5             INDEX (UNIQUE SCAN) OF 'PK_MB_MEM' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=6)
+  13    3         FILTER
+  14   13           NESTED LOOPS (Cost=11 Card=4 Bytes=284)
+  15   14             NESTED LOOPS (Cost=10 Card=4 Bytes=260)
+  16   15               NESTED LOOPS (Cost=9 Card=4 Bytes=244)
+  17   16                 NESTED LOOPS (Cost=8 Card=8 Bytes=416)
+  18   17                   TABLE ACCESS (BY GLOBAL INDEX ROWID) OF 'TR_ORD' (TABLE) (Cost=2 Card=9 Bytes=144)
+  19   18                     INDEX (RANGE SCAN) OF 'IX3_TR_ORD' (INDEX) (Cost=1 Card=9)
+  20   17                   TABLE ACCESS (BY INDEX ROWID) OF 'CC_EMER_NTCE' (TABLE) (Cost=1 Card=1 Bytes=36)
+  21   20                     INDEX (RANGE SCAN) OF 'IX4_CC_EMER_NTCE' (INDEX) (Cost=1 Card=2)
+  22   16                 INDEX (UNIQUE SCAN) OF 'PK_CC_EMER_CTNT' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=9)
+  23   15               INDEX (UNIQUE SCAN) OF 'PK_CM_EMP' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=4)
+  24   14             INDEX (UNIQUE SCAN) OF 'PK_MB_MEM' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=6)
+GRID=25,13
+  0
+SELECT STATEMENT Optimizer=FIRST_ROWS (Cost=15 Card=1 Bytes=13)
+
+
+
+
+
+
+
+
+
+-1
+1
+  1
+SORT (GROUP BY) (Card=1 Bytes=13)
+
+
+
+
+
+
+
+
+
+0
+1
+  2
+VIEW (Cost=15 Card=5 Bytes=65)
+1
+
+
+
+
+
+
+
+
+1
+1
+  3
+UNION-ALL
+
+
+
+
+
+
+
+
+
+2
+1
+  4
+FILTER
+
+
+
+
+
+
+
+
+
+3
+1
+  5
+NESTED LOOPS (Cost=4 Card=1 Bytes=45)
+
+
+
+
+
+
+
+
+
+4
+1
+  6
+NESTED LOOPS (Cost=3 Card=1 Bytes=39)
+
+
+
+
+
+
+
+
+
+5
+1
+  7
+NESTED LOOPS (Cost=2 Card=1 Bytes=30)
+
+
+
+
+
+
+
+
+
+6
+1
+  8
+INDEX (UNIQUE SCAN) OF 'PK_CM_EMP' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=4)
+
+
+
+
+
+
+"T6"."EMP_NO"=TO_NUMBER(:1)
+
+
+7
+1
+  9
+TABLE ACCESS (BY INDEX ROWID) OF 'CC_EMER_NTCE' (TABLE) (Cost=1 Card=1 Bytes=26)
+2
+
+
+
+
+
+
+
+
+7
+1
+ 10
+INDEX (RANGE SCAN) OF 'IX5_CC_EMER_NTCE' (INDEX) (Cost=1 Card=2)
+
+
+
+
+
+
+"T1"."EMP_NO"=TO_NUMBER(:1) AND "T1"."CREATE_DT">=TO_DATE(:2,'YYYY/MM/DD') AND "T1"."CREATE_DT"<=TO_DATE(:3,'YYYY/MM/DD')
+
+
+9
+1
+ 11
+INDEX (UNIQUE SCAN) OF 'PK_CC_EMER_CTNT' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=9)
+
+
+
+
+
+
+"T1"."EMER_NTCE_SEQ"="T4"."EMER_NTCE_SEQ" AND "T4"."EMER_CTNT_SEQ"=1
+
+
+6
+1
+ 12
+INDEX (UNIQUE SCAN) OF 'PK_MB_MEM' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=6)
+
+
+
+
+
+
+"T1"."MEM_NO"="T5"."MEM_NO"
+
+
+5
+1
+ 13
+FILTER
+
+
+
+
+
+
+
+
+
+3
+1
+ 14
+NESTED LOOPS (Cost=11 Card=4 Bytes=284)
+
+
+
+
+
+
+
+
+
+13
+1
+ 15
+NESTED LOOPS (Cost=10 Card=4 Bytes=260)
+
+
+
+
+
+
+
+
+
+14
+1
+ 16
+NESTED LOOPS (Cost=9 Card=4 Bytes=244)
+
+
+
+
+
+
+
+
+
+15
+1
+ 17
+NESTED LOOPS (Cost=8 Card=8 Bytes=416)
+
+
+
+
+
+
+
+
+
+16
+1
+ 18
+TABLE ACCESS (BY GLOBAL INDEX ROWID) OF 'TR_ORD' (TABLE) (Cost=2 Card=9 Bytes=144)
+7
+
+
+
+ROW LOCATION
+ROW LOCATION
+
+
+
+17
+1
+ 19
+INDEX (RANGE SCAN) OF 'IX3_TR_ORD' (INDEX) (Cost=1 Card=9)
+
+
+
+
+
+
+"T2"."BUY_MEM_NO"=TO_NUMBER(:4)
+
+
+18
+1
+ 20
+TABLE ACCESS (BY INDEX ROWID) OF 'CC_EMER_NTCE' (TABLE) (Cost=1 Card=1 Bytes=36)
+6
+
+
+
+
+
+
+
+
+17
+1
+ 21
+INDEX (RANGE SCAN) OF 'IX4_CC_EMER_NTCE' (INDEX) (Cost=1 Card=2)
+
+
+
+
+
+
+"T1"."ORD_NO"="T2"."ORD_NO"
+
+
+20
+1
+ 22
+INDEX (UNIQUE SCAN) OF 'PK_CC_EMER_CTNT' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=9)
+
+
+
+
+
+
+"T1"."EMER_NTCE_SEQ"="T4"."EMER_NTCE_SEQ" AND "T4"."EMER_CTNT_SEQ"=1
+
+
+16
+1
+ 23
+INDEX (UNIQUE SCAN) OF 'PK_CM_EMP' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=4)
+
+
+
+
+
+
+"T1"."EMP_NO"="T6"."EMP_NO"
+
+
+15
+1
+ 24
+INDEX (UNIQUE SCAN) OF 'PK_MB_MEM' (INDEX (UNIQUE)) (Cost=1 Card=1 Bytes=6)
+
+
+
+
+
+
+"T1"."MEM_NO"="T5"."MEM_NO"
+
+
+14
+1
+SCHEMA=1
+
+TRACE=1
+
