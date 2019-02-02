@@ -1,5 +1,4 @@
-AWS CLI 패키지 설치
-
+[AWS CLI 패키지 설치]
 1. PyPA 파이썬 패키지 관리자 설치
 #Windows
 	$ sudo apt install python-pip
