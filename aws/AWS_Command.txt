@@ -1,8 +1,128 @@
+[AWS Commands]
+
 #AWS 가장 최근에 출시된 AMI 조회 명령어
 $ aws ec2 describe-images --filters "Name=description,Values=Amazon Linux AMI * x86_64 HVM GP2" --query 'Images[*].[CreationDate, Description, ImageId]' --output text | sort -k 1 | tail
 
+2018-01-08T18:42:48.000Z	Amazon Linux AMI 2017.09.1.20180108 x86_64 HVM GP2	ami-d9b616b7
+2018-01-15T19:12:53.000Z	Amazon Linux AMI 2017.09.1.20180115 x86_64 HVM GP2	ami-863090e8
+2018-01-18T23:06:07.000Z	Amazon Linux AMI 2017.09.1.20171120 x86_64 HVM GP2	ami-d2e546bc
+2018-03-07T06:59:51.000Z	Amazon Linux AMI 2017.09.1.20180307 x86_64 HVM GP2	ami-5e1ab730
+2018-03-07T06:59:57.000Z	Amazon Linux AMI 2017.09.1-testlongids.20180307 x86_64 HVM GP2	ami-0c1f5d99d066957a6
+2018-04-13T00:26:51.000Z	Amazon Linux AMI 2018.03.0.20180412 x86_64 HVM GP2	ami-efaf0181
+2018-05-08T18:06:00.000Z	Amazon Linux AMI 2018.03.0.20180508 x86_64 HVM GP2	ami-c10fa6af
+2018-06-22T22:25:55.000Z	Amazon Linux AMI 2018.03.0.20180622 x86_64 HVM GP2	ami-ebc47185
+2018-08-11T02:29:47.000Z	Amazon Linux AMI 2018.03.0.20180811 x86_64 HVM GP2	ami-0a10b2721688ce9d2
+2018-11-08T00:27:43.000Z	Amazon Linux AMI 2018.03.0.20180811 x86_64 HVM GP2	ami-0ca143abdc8556b4e
 
 
-#보안 그룹 확인
+
+#VPC 확인
 $ aws ec2 describe-vpcs
+
+
+#VPC에 보안 그룹 생성 
+#	[참고] 생성된 보안 그룹은 기본적으로 모든 아웃바운드 트래픽을 허용함
+
+$ aws ec2 create-security-group  --group-name HelloWorld  --description "Hello World Demo"  --vpc-id vpc-0e0474defbfdef750
+{
+    "GroupId": "sg-0608cd3a3dd02ae15"
+}
+
+
+
+#생성된 보안 그룹에 22, 3000 포트 인바운드 트래픽 허용
+#	[참고]ssh(tcp/22)의 0.0.0.0/0 을 공인IP/32 로 설정하면 특정 IP 하나만 ssh 접속을 허용하도록 보안을 강화할 수 있음
+# 	사무실 대역만 허용하는 등으로 응용 가능
+$aws ec2 authorize-security-group-ingress --group-name HelloWorld --protocol tcp --port 22 --cidr 0.0.0.0/0
+$aws ec2 authorize-security-group-ingress --group-name HelloWorld --protocol tcp --port 3000 --cidr 0.0.0.0/0
+
+
+#보안 그룹이 제대로 적용(포트 오픈) 되었는지 확인
+$aws ec2 describe-security-groups --group-name HelloWorld --output
+
+IPPERMISSIONS	22	tcp	22
+IPRANGES	0.0.0.0/0
+IPPERMISSIONS	3000	tcp	3000
+IPRANGES	0.0.0.0/0
+IPPERMISSIONSEGRESS	-1
+IPRANGES	0.0.0.0/0
+
+
+#ssh 키 생성
+$ aws ec2 create-key-pair --key-name EffectiveDevOpsAWS
+
+{
+    "KeyMaterial": "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEAt+47cchBaM9JtEWu/LrUoek0kXavy8MavVb31o39Tw0PHk/vwXeV/6vWBj1E\nVFySiC2TWRdyaya8BAZjQBeXkiblUZCqDOkZ16o/K89NzZop9LZyLPaid11ysinxjwFzOUQbdFmJ\nF+K3lIFG0HR0Wf4Res/m1Iy+1x2GxJDtxkvWflMF3C8VkfjbX2QpMml0QtwGvbp0AMdFbVzbOZo5\nZA+emj30HhHVWg1817q+b/YIFlUSJWej8AngWdBw+BvFYYoFhWzfR4iZ2h1/HlKd3soEtFo3l9op\nWVTEPRx+Qu77zD4uUR7YkExE+BTr2iJshiONdHo39FMuxQLg0pA8KQIDAQABAoIBAAO8/9BMNagf\nrmvPjsLsOS4hQ0RBmUkW6hA3GEpwEFnu9gOztDfGanIL2AnAbQcZ6pCB/KCu7VBoNSIPzyyaTiZW\nTArgWdRxWGkduLL3P6mSHJAwtRlc2eh7Kb2dRJ+Xc/QSAkzXFQY7QWfvSLUr6MF7fHd2ikZ/pdFR\ndE/CclK5ZwFEM+es7saL+UsnKw3Epm3/SFBArnEVidQvb1+3KUTwyEwrkyK9M9aGz78Uj7IjUAgT\nBC4OqIsqncAOoNBX7LyAm1lHXVZ1ugHx7e6vB/Lx5ejlrcORoieqaoJpfAxgCmQbGbDcjl2rBH5R\nvAur1qgwzHQ5LQc1zCqOJI2Cv9ECgYEA78qaV2Z5APk7MgNdxO0gSmq7MHW4DU4eLG444IxKeB8X\nYJS50tVh4tX9cuOefa9fnF1Kpn89gkCraALrIH0Jhk5L2AfzqVZs8Or5uaZg7JUpR8XwK8EqWJuf\nMOuju/8yHFVDue8PHzLFDTyik1Fdi2+nqtydA3jZ7XPTxxwabjMCgYEAxF0AuHopsYaH4ODu54zW\nlDG+wmH00HLbRsqfESJyKQichVV+HP7SC+/zKFc47r54ymYyWP4HCYCitt1biZE5Pv46XMqY/wIz\nZuIVMDWlFBQ6U9duJbyqGksNkNpQT1xSQE0tnedlNLWrtAQNLsAkhyLji4ajTovX7v22kz6qmDMC\ngYBO+CsyI2YwQuQSyXcFFo6u002IXQxbHWHkgfwrPyh7PMoHHZPA8lMFUDHit0GH5MyZA0RFZtwL\n3F5Wp7dlgKg1We2yXJQLLZI9GTVaxYdgApOQtogs8LWQbtfTVZcbn6SSHiZqwmb5gE/S1yg3WfFz\nrTbLl1ICRbeHcsDI7uFpbwKBgB7qPYjNwu6uLYpcH4DZDZd7VXspDPAchSVaFT0PXUXUkz/yu844\n2D0E5BV/1fjQiBflixuzssvuMq/zncvEz2x5fhrJ0tijMhCKm6dhasIEhUJZ8n+Ceo11L4eUt3wn\nHtP80qe/nJF14LiQwrqPibC073oyElf1cGOyEiKQhS89AoGBAKq3lhAEmHaIT8JG6IZLj1DGR9Mi\nE3PDe+o3EEFfOivFpL613JGcJidTHENeT4E80juJF6605Pstx5a+3uYmmvUtND3kOk/PxXP616to\n69wQznGINcql3e4W56G4taw113SRlWD9SaldRTbcWckmJ9cfB7MPKaw6l3w5HZqnZ7Q2\n-----END RSA PRIVATE KEY-----",
+    "KeyName": "EffectiveDevOpsAWS",
+    "KeyFingerprint": "1e:ba:81:d5:a8:a6:ae:3b:02:2a:64:f1:bf:a4:03:4b:87:6f:ce:02"
+}
+
+#생성된 키  저장
+# echo -e {키영역붙여넣기} > 파일명
+$echo -e "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEAt+47cchBaM9JtEWu/
+...생략...
+Z7Q2\n-----END RSA PRIVATE KEY-----" > ~/.ssh/EffectiveDevOpsAWS.pem
+
+
+#EC2 인스턴스 띄우기
+#	image-id : https://ap-northeast-2.console.aws.amazon.com/ec2/v2/home?region=ap-northeast-2#LaunchInstanceWizard 에서 조회
+# 	subnet-id : https://ap-northeast-2.console.aws.amazon.com/vpc/home?region=ap-northeast-2#subnets:sort=SubnetId 에서 조회
+$ aws ec2 run-instances --instance-type t2.micro --key-name EffectiveDevOpsAWS --security-group-ids sg-0608cd3a3dd02ae15 --image-id ami-00dc207f8ba6dc919 --subnet-id subnet-0dcd1ddb1b0fbf8e2
+
+{
+    "Instances": [
+        {
+            "Monitoring": {
+                "State": "disabled"
+            },
+            "PublicDnsName": "",
+            "StateReason": {
+                "Message": "pending",
+                "Code": "pending"
+            },
+            "State": {
+                "Code": 0,
+                "Name": "pending"
+            },
+.. 생략 ..
+            "StateTransitionReason": "",
+            "InstanceId": "i-03359a4ce1e6cb02c",
+            "ImageId": "ami-00dc207f8ba6dc919",
+            "PrivateDnsName": "ip-172-31-11-218.ap-northeast-2.compute.internal",
+            "KeyName": "EffectiveDevOpsAWS",
+            "SecurityGroups": [
+                {
+                    "GroupName": "HelloWorld",
+                    "GroupId": "sg-0608cd3a3dd02ae15"
+                }
+            ],
+... 생략 ...
+    "ReservationId": "r-0c7e6f4d55c12bce0",
+    "Groups": [],
+    "OwnerId": "371766272109"
+}
+
+#EC2 인스턴스 상태 확인
+$ aws ec2 describe-instance-status --instance-ids i-03359a4ce1e6cb02c
+
+
+
+#ssh로 EC2 에 접속하기
+#IP 확인
+$ aws ec2 describe-instances --instance-ids i-03359a4ce1e6cb02c --query "Reservations[*].Instances[*].PublicIpAddress"
+
+[
+    [
+        "13.125.218.186"
+    ]
+]
+
+#확인된 IP로 접속
+$ ssh -i ~/.ssh/EffectiveDevOpsAWS.pem ec2-user@13.125.218.186
+
+[ec2-user@ip-172-31-11-218 ~]$
+
+
+#만약 키 권한으로 인해 접속이 안되면 키 권한을 다음과 같이 제안해야 함
+chmod 600 ~/.ssh/EffectiveDevOpsAWS.pem
 
