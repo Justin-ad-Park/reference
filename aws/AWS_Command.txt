@@ -1,0 +1,8 @@
+#AWS 가장 최근에 출시된 AMI 조회 명령어
+$ aws ec2 describe-images --filters "Name=description,Values=Amazon Linux AMI * x86_64 HVM GP2" --query 'Images[*].[CreationDate, Description, ImageId]' --output text | sort -k 1 | tail
+
+
+
+#보안 그룹 확인
+$ aws ec2 describe-vpcs
+
