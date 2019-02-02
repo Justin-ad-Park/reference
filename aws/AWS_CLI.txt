@@ -1,0 +1,26 @@
+AWS CLI 패키지 설치
+
+1. PyPA 파이썬 패키지 관리자 설치
+#Windows
+	$ sudo apt install python-pip
+
+#MAC
+	$ sudo easy_install pip
+
+
+2. pip로 AWS CLI 설치
+	sudo pip install --upgrade --user awscli
+
+3. AWS CLI 설정하기
+	more credentials.csv
+# 계정 Access Key Id, Secret Access Key 확인
+
+	$ aws configure
+#Key ID : 
+#Access Key :
+#Default region name : ap-northeast-2
+  => 아시아 태평양 서울
+
+4. CLI 정상 동작 여부 확인
+	was cam list-users
+
